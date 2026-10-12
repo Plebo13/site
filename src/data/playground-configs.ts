@@ -8,6 +8,129 @@
 // field definitions from values.schema.json.
 
 export const chartConfigs: Record<string, ChartConfig> = {
+  openhuman: [
+    {
+      name: 'Core',
+      fields: [
+        {
+          label: 'Backend URL',
+          key: 'openhuman.backendUrl',
+          type: 'text',
+          default: 'https://api.tinyhumans.ai',
+          description: 'TinyHumans API endpoint used by the Core',
+        },
+        {
+          label: 'Allowed browser origins',
+          key: 'openhuman.allowedOrigins',
+          type: 'text',
+          default: '',
+          description: 'Exact comma-separated origins permitted to call RPC',
+        },
+        {
+          label: 'Anonymous analytics',
+          key: 'openhuman.analyticsEnabled',
+          type: 'toggle',
+          default: 'false',
+          description: 'Enable upstream anonymous analytics deliberately',
+        },
+      ],
+    },
+    {
+      name: 'State',
+      fields: [
+        {
+          label: 'Workspace size',
+          key: 'persistence.size',
+          type: 'text',
+          default: '10Gi',
+          description: 'Capacity for config, memory, sessions and SQLite state',
+        },
+        {
+          label: 'Projects size',
+          key: 'projectsPersistence.size',
+          type: 'text',
+          default: '10Gi',
+          description: 'Capacity for agent projects and file actions',
+        },
+      ],
+    },
+    {
+      name: 'Platform controls',
+      fields: [
+        {
+          label: 'NetworkPolicy',
+          key: 'networkPolicy.enabled',
+          type: 'toggle',
+          default: 'true',
+          description: 'Restrict RPC clients and provider egress',
+        },
+        {
+          label: 'External Secrets',
+          key: 'externalSecrets.enabled',
+          type: 'toggle',
+          default: 'false',
+          description: 'Materialize the RPC token through External Secrets Operator',
+        },
+      ],
+    },
+    {
+      name: 'External Secrets',
+      collapsible: true,
+      gateField: 'externalSecrets.enabled',
+      fields: [
+        {
+          label: 'Authentication Secret',
+          key: 'auth.existingSecret',
+          type: 'text',
+          default: 'openhuman-auth',
+          description: 'Target Secret consumed by the RPC bearer environment variable',
+        },
+        {
+          label: 'ExternalSecret name',
+          key: 'externalSecrets.items[0].name',
+          type: 'text',
+          default: 'openhuman-auth',
+          description: 'Name of the ExternalSecret and its default target Secret',
+        },
+        {
+          label: 'Store kind',
+          key: 'externalSecrets.items[0].spec.secretStoreRef.kind',
+          type: 'select',
+          default: 'ClusterSecretStore',
+          options: ['ClusterSecretStore', 'SecretStore'],
+          description: 'External Secrets store scope',
+        },
+        {
+          label: 'Store name',
+          key: 'externalSecrets.items[0].spec.secretStoreRef.name',
+          type: 'text',
+          default: 'production',
+          description: 'SecretStore or ClusterSecretStore name',
+        },
+        {
+          label: 'Target Secret',
+          key: 'externalSecrets.items[0].spec.target.name',
+          type: 'text',
+          default: 'openhuman-auth',
+          description: 'Kubernetes Secret materialized by the operator',
+        },
+        {
+          label: 'Remote key',
+          key: 'externalSecrets.items[0].spec.data[0].remoteRef.key',
+          type: 'text',
+          default: 'openhuman/core-token',
+          description: 'Provider key containing the RPC bearer',
+        },
+        {
+          label: 'Secret key',
+          key: 'externalSecrets.items[0].spec.data[0].secretKey',
+          type: 'text',
+          default: 'core-token',
+          description: 'Key written into the target Kubernetes Secret',
+        },
+      ],
+    },
+  ],
   'ib-gateway': [
     {
       name: 'Trading safety',
